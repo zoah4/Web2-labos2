@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prijava</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+    <h2>Prijava</h2>
+    <!--tu dodaj tekst što unijeti za testiranje!!!-->
+    <form id="login-form" method="POST" action="/login">
+        <label for="username">Korisničko ime:</label>
+        <input type="text" id="username" name="username" required />
+        <br />
+        <label for="password">Lozinka:</label>
+        <input type="password" id="password" name="password" required />
+        <br />
+        <button type="submit">Prijava</button>
+    </form>
+    <div id="login-message"></div>
+    <br>
+    <a href="/">Povratak na početnu stranicu</a>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const errorMessage = urlParams.get('error');
+    
+        if (errorMessage) {
+            document.getElementById('login-message').innerText = errorMessage;
+        } 
+    </script>
+</body>
+</html>

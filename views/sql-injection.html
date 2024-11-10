@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SQL Injection Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>SQL Injection Test</h1>
+    <!--tu dodaj tekst što unijeti za testiranje!!!-->
+    <form id="sql-form">
+        <input type="text" name="username" id="username" placeholder="Unesite korisničko ime" required>
+        <input type="password" name="password" id="password" placeholder="Unesite lozinku" required>
+        <button type="submit">Pretraži</button>
+        <label>
+            <input type="checkbox" id="vulnerability-toggle">
+            Omogući ranjivost
+        </label>
+    </form>
+    <div id="results"></div>
+    <br>
+    <a href="/">Povratak na početnu stranicu</a>
+
+    <script src="script.js"></script>
+</body>
+</html>
