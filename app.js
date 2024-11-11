@@ -6,7 +6,7 @@ const session = require('express-session');
 const fs = require('fs');
 const crypto = require('crypto');
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
