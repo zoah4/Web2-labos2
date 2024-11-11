@@ -15,12 +15,47 @@ app.use(session({ secret: 'y0urS3cr3tK3y', resave: false, saveUninitialized: tru
     cookie: { httpOnly: true, secure: false } })); 
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'web2-lab2',
-    password: 'GS4Vh2tw',
+    user: 'users_db_87rl_user',
+    host: '@dpg-cson15hu0jms738mij2g-a.frankfurt-postgres.render.com',
+    database: 'users_db_87rl',
+    password: 'JkDWa76qHoUCJddWxYeFKvnnw4azztX4',
     port: 5432,
 });
+
+pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username TEXT NOT NULL,
+        password TEXT NOT NULL,
+        oib TEXT,
+        cardNumber TEXT
+    );
+`)
+    .then(() => {
+        console.log("Tablica 'users' uspješno kreirana.");
+
+        const insertQuery = `
+            INSERT INTO users (username, password, oib, cardNumber)
+            VALUES 
+            ($1, $2, $3, $4), 
+            ($5, $6, $7, $8), 
+            ($9, $10, $11, $12)
+        `;
+        
+        const values = [
+            "user1", "pass1", "12345678901", "1111-2222-3333-4444",
+            "user2", "pass2", "23456789012", "5555-6666-7777-8888",
+            "user3", "pass3", "34567890123", "9999-0000-1111-2222"
+        ];
+
+        return pool.query(insertQuery, values);
+    })
+    .then(() => {
+        console.log("Podaci su uspješno uneseni u tablicu 'users'.");
+    })
+    .catch(err => {
+        console.error("Greška:", err);
+    });
 
 let isChecked2 = false;
 
