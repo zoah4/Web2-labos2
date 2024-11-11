@@ -20,6 +20,7 @@ const pool = new Pool({
     database: 'users_db_87rl',
     password: 'JkDWa76qHoUCJddWxYeFKvnnw4azztX4',
     port: 5432,
+    ssl: { rejectUnauthorized: false }
 });
 
 pool.query(`
