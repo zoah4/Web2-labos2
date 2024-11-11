@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const sqlite3 = require("sqlite3").verbose();
+const Datastore = require('nedb');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const fs = require('fs');
@@ -15,28 +15,26 @@ app.use(express.static('views'));
 app.use(session({ secret: 'y0urS3cr3tK3y', resave: false, saveUninitialized: true,
     cookie: { httpOnly: true, secure: false } })); 
 
-const DB_FILE_PATH = './users.db'; 
+const db = new Datastore({ filename: './users.db', autoload: true });
 
-if (fs.existsSync(DB_FILE_PATH)) {
-  fs.unlinkSync(DB_FILE_PATH);  
-}
+db.count({}, (err, count) => {
+    if (err) {
+        console.error('Greška prilikom provjere broja korisnika:', err);
+    } else if (count === 0) { // Ako nema korisnika, umetnite početne korisnike
+        const initialUsers = [
+            { username: "user1", password: "pass1", oib: "12345678901", cardNumber: "1111-2222-3333-4444" },
+            { username: "user2", password: "pass2", oib: "23456789012", cardNumber: "5555-6666-7777-8888" },
+            { username: "user3", password: "pass3", oib: "34567890123", cardNumber: "9999-0000-1111-2222" }
+        ];
 
-const db = new sqlite3.Database(DB_FILE_PATH);
-
-db.serialize(() => {
-  db.run(`CREATE TABLE users (
-    id INTEGER PRIMARY KEY,
-    username TEXT,
-    password TEXT,
-    oib TEXT,
-    cardNumber TEXT
-  )`);
-
-  const stmt = db.prepare("INSERT INTO users (username, password, oib, cardNumber) VALUES (?, ?, ?, ?)");
-  stmt.run("user1", "pass1", "12345678901", "1111-2222-3333-4444");
-  stmt.run("user2", "pass2", "23456789012", "5555-6666-7777-8888");
-  stmt.run("user3", "pass3", "34567890123", "9999-0000-1111-2222");
-  stmt.finalize();
+        db.insert(initialUsers, (err, newDocs) => {
+            if (err) {
+                console.error('Greška prilikom unosa početnih korisnika:', err);
+            } else {
+                console.log('Početni korisnici su uspješno dodani.');
+            }
+        });
+    }
 });
 
 let isChecked2 = false;
@@ -46,9 +44,7 @@ app.post('/search', (req, res) => {
     const { username, password } = req.body;
     const isChecked = req.body.isChecked === 'true'; 
 
-    const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
-
-    db.all(query, (err, rows) => {
+    db.find({ username: username, password: password }, (err, rows) => {
         if (err) {
             res.send("Greška u upitu.");
         } else if (rows.length > 0) {
@@ -74,7 +70,7 @@ app.post('/toggle-vulnerability', (req, res) => {
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
 
-    db.get("SELECT * FROM users WHERE username = ? AND password = ?", [username, password], (err, user) => {
+    db.findOne({ username: username, password: password }, (err, user) => {
         if (err) {
             return res.status(500).send("Greška u sustavu.");
         }
@@ -196,7 +192,7 @@ app.post('/update-password', (req, res) => {
         return res.status(400).send("Lozinke se ne podudaraju.");
     }
 
-    db.run("UPDATE users SET password = ? WHERE id = ?", [password_new, req.session.userId], (err) => {
+    db.update({ _id: req.session.userId }, { $set: { password: password_new } }, {}, (err) => {
         if (err) {
             console.error(err);
             return res.status(500).send("Greška pri ažuriranju lozinke.");
@@ -221,7 +217,7 @@ app.get('/update-password', (req, res) => {
         return res.status(400).json({ message: "Lozinke se ne podudaraju." });
     }
 
-    db.run("UPDATE users SET password = ? WHERE id = ?", [password_new, req.session.userId], (err) => {
+    db.update({ _id: req.session.userId }, { $set: { password: password_new } }, {}, (err) => {
         if (err) {
             console.error(err);
             return res.status(500).json({ message: "Greška pri ažuriranju lozinke." });
