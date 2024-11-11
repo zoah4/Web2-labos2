@@ -16,7 +16,7 @@ app.use(session({ secret: 'y0urS3cr3tK3y', resave: false, saveUninitialized: tru
 
 const pool = new Pool({
     user: 'users_db_87rl_user',
-    host: '@dpg-cson15hu0jms738mij2g-a.frankfurt-postgres.render.com',
+    host: 'dpg-cson15hu0jms738mij2g-a.frankfurt-postgres.render.com',
     database: 'users_db_87rl',
     password: 'JkDWa76qHoUCJddWxYeFKvnnw4azztX4',
     port: 5432,
