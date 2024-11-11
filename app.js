@@ -34,6 +34,10 @@ pool.query(`
 `)
     .then(() => {
         console.log("Tablica 'users' uspješno kreirana.");
+        return pool.query(`DELETE FROM users;`);
+    })
+    .then(() => {
+        console.log("Svi redovi su uspješno obrisani iz tablice 'users'.");
 
         const insertQuery = `
             INSERT INTO users (username, password, oib, cardNumber)
