@@ -7,7 +7,12 @@
 </head>
 <body>
     <h1>SQL Injection Test</h1>
-    <!--tu dodaj tekst što unijeti za testiranje!!!-->
+    <div class="instructions">
+        <p>
+            <strong>Upute:</strong>Klikom na checkbox se uključi ili isključi ranjivost. Unosom korisničkog imena i lozinke dobivamo podatke do kojih ne bi trebali svi moći doći.
+            Kad se u polje korisničko ime ili lozinka upiše <strong>' OR '1'='1'--</strong> (možete kopirati odavde), onda se detektira SQL injection koji će se zabraniti u slučaju kada je ranjivost isključena.
+        </p>
+    </div>
     <form id="sql-form">
         <input type="text" name="username" id="username" placeholder="Unesite korisničko ime" required>
         <input type="password" name="password" id="password" placeholder="Unesite lozinku" required>

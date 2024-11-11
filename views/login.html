@@ -9,7 +9,13 @@
 </head>
 <body>
     <h2>Prijava</h2>
-    <!--tu dodaj tekst što unijeti za testiranje!!!-->
+    <div class="instructions">
+        <p>
+            <strong>Upute: </strong>Na stranici za prijavu unose se korisničko ime i lozinka. Nakon uspješne prijave, na stranici za promjenu lozinke imamo checkbox kojim kontroliramo hoće li se uključiti ili isključiti ranjivost. Nakon upisane nove lozinke klikom na gumb ju mijenjamo. 
+            <strong>2 sekunde kasnije</strong> preusmjereni smo na stranicu sa <strong>zlonamjernom slikom</strong> (sakrivena je) koja će promijeniti lozinku ovisno o stanju checkboxa. 
+            Naknadno se odjavimo te pokušamo prijaviti s novom lozinkom. <em>U slučaju da je omogućena ranjivost, nova lozinka će biti "hacked".</em>
+        </p>
+    </div>
     <form id="login-form" method="POST" action="/login">
         <label for="username">Korisničko ime:</label>
         <input type="text" id="username" name="username" required />
